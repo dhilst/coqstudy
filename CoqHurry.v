@@ -47,12 +47,29 @@ Qed.
 
 (*
 
-Exercise on addition, alternative definition We can define a new addition function
-on natural numbers:
+Exercise on addition, alternative definition We can define a new
+addition function on natural numbers:
+
 Fixpoint add n m := match n with 0 => m | S p => add p (S m) end.
+
 Prove the following statements.
 forall n m, add n (S m) = S (add n m)
 forall n m, add (S n) m = S (add n m)
 forall n m, add n m = n + m
+
 Remember that you may use a lemma you just proved when proving a new exercise
- *)
+
+*)
+
+Fixpoint add n m := match n with 0 => m | S p => add p (S m) end.
+
+Lemma add_assoc : forall n m, add n (S m) = S (add n m).
+  induction n.
+  simpl; reflexivity.
+  induction m.
+  simpl.
+  apply IHn.
+  simpl.
+  rewrite <- IHn with (m := S (S m)).
+  reflexivity.
+Qed.
