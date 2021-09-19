@@ -1,6 +1,8 @@
+Import Init.Nat.
 Require Import Arith.
 Require Import Omega.
 Require Import List.
+Require Import Nat.
 
 Fixpoint sum_n n :=
   match n with
@@ -63,7 +65,7 @@ Remember that you may use a lemma you just proved when proving a new exercise
 
 Fixpoint add n m := match n with 0 => m | S p => add p (S m) end.
 
-Lemma add_assoc : forall n m, add n (S m) = S (add n m).
+Lemma add_assoc_l : forall n m, add n (S m) = S (add n m).
   induction n.
   simpl; reflexivity.
   induction m.
@@ -73,3 +75,36 @@ Lemma add_assoc : forall n m, add n (S m) = S (add n m).
   rewrite <- IHn with (m := S (S m)).
   reflexivity.
 Qed.
+
+Lemma add_assoc_r : forall n m, add (S n) m = S (add n m).
+  induction n.
+  simpl; reflexivity.
+  induction m; simpl; apply IHn.
+Qed.
+
+Lemma add_plus : forall n m, add n m = n + m.
+  induction n.
+  intros m.
+  simpl.
+  reflexivity.
+  intros m.
+  simpl.
+  rewrite IHn.
+  ring.
+Qed.
+
+Fixpoint sum_odd_n (n : nat) : nat :=
+  match n with
+    0 => 0
+  | S p => 1 + 2 * p + sum_odd_n p 
+  end.
+
+Lemma sum_odd_n_lemma :  forall n : nat, sum_odd_n n = n * n.
+  induction n; simpl. reflexivity.
+  f_equal.
+  replace (n + 0) with n.
+  rewrite IHn.
+  ring.
+  ring.
+Qed.
+
