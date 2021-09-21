@@ -1,0 +1,8 @@
+# Generated
+-R src TezosOfOCaml
+-arg -impredicative-set
+-arg -w
+-arg -notation-overridden,-unexpected-implicit-declaration
+
+./src/Foo.v
+./src/CoqHurry.v

@@ -108,3 +108,65 @@ Lemma sum_odd_n_lemma :  forall n : nat, sum_odd_n n = n * n.
   ring.
 Qed.
 
+Definition is_zero (n : nat) : bool :=
+    match n with
+      0 => true
+    | _ => false
+    end.
+
+Lemma not_is_zero_pred : 
+    forall x, is_zero x = false -> S (Nat.pred x) = x.
+  intros x.
+  unfold is_zero, Nat.pred.
+  case x.
+  discriminate.
+  reflexivity.
+Qed.
+
+(* Chap 6 *)
+
+Require Import List.
+Import ListNotations.
+
+Fixpoint insert n l :=
+  match l with
+    [] => n::nil
+  | a :: tl => if n <=? a
+                then n :: l
+                else a :: insert n tl
+  end.
+
+Fixpoint sort l :=
+  match l with 
+    [] => []
+  | a :: tl => insert a (sort tl)
+  end.
+
+Fixpoint count n l :=
+  match l with
+    [] => 0
+  | a :: tl => 
+      let r := count n tl 
+        in if n =? a then 1+r else r
+  end.
+
+Lemma insert_incr : forall n l, count n (insert n l) = 1 + count n l.
+  intros n l ; induction l.
+  { simpl.
+    rewrite Nat.eqb_refl.
+    reflexivity.
+  }
+  { simpl.
+    case (n <=? a).
+    { simpl. 
+      rewrite Nat.eqb_refl.
+      reflexivity.
+    }
+    { simpl.
+      case (n =? a).
+      - rewrite IHl; reflexivity.
+      - rewrite IHl; reflexivity.
+    }
+  }
+Qed.
+          
